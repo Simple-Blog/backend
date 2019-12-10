@@ -1,9 +1,12 @@
 ---
 swagger: "2.0"
 info:
-  description: "A simple API to learn how to write OpenAPI Specification"
+  description: "A simple blog for service computing hw 12"
   version: "1.0.0"
-  title: "Simple API"
+  title: "Simple Blog"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "simple.api"
 basePath: "/openapi101"
 schemes:
@@ -11,74 +14,117 @@ schemes:
 paths:
   /auth/signin:
     post:
-      summary: "sign in"
+      summary: "Sign in"
+      description: "User sign in"
+      parameters:
+      - in: "body"
+        name: "username"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+        x-exportParamName: "Username"
+      responses:
+        "200":
+          description: "OK"
+        "404":
+          description: "Not Found"
+  /auth/signup:
+    post:
+      summary: "Sign up"
+      description: "Sign up a user"
+      parameters:
+      - in: "body"
+        name: "username"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+        x-exportParamName: "Username"
+      responses:
+        "200":
+          description: "OK"
+        "400":
+          description: "Wrong"
+  /users/{username}/article/{article_id}:
+    get:
+      summary: "Get an article"
+      description: "Get an article by article's id"
       parameters:
       - name: "username"
         in: "path"
         required: true
         type: "string"
         x-exportParamName: "Username"
-      responses:
-        "200":
-          description: "A list of Person"
-          schema:
-            required:
-            - "username"
-            properties:
-              username:
-                type: "string"
-        "404":
-          description: "The user does not exists"
-  /auth/signup:
-    post:
-      summary: "sign up a user"
-      description: "sign up a user"
-      parameters:
-      - in: "body"
-        name: "user"
-        required: false
-        schema:
-          $ref: "#/definitions/user"
-        x-exportParamName: "User"
-      responses:
-        "204":
-          description: "OK"
-        "400":
-          description: "Wrong"
-  /article/{article_id}:
-    get:
-      summary: "get post"
-      parameters:
       - name: "article_id"
         in: "path"
-        description: "article id"
         required: true
         type: "string"
         x-exportParamName: "ArticleId"
       responses:
         "200":
-          description: "A post"
+          description: "OK"
           schema:
-            properties:
-              name:
-                type: "string"
-              data:
-                type: "string"
-  /article:
+            $ref: "#/definitions/Article"
+  /users/{username}/article:
     post:
       summary: "Create article"
       parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        type: "string"
+        x-exportParamName: "Username"
       - in: "body"
-        name: "content"
+        name: "article"
         required: true
         schema:
-          $ref: "#/definitions/content"
-        x-exportParamName: "Content"
+          $ref: "#/definitions/Article"
+        x-exportParamName: "Article"
       responses:
-        "204":
-          description: "A post"
+        "200":
+          description: "OK"
+  /users/{username}/article/{article_id}/comment:
+    get:
+      summary: "Get a article's comments"
+      parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        type: "string"
+        x-exportParamName: "Username"
+      - name: "article_id"
+        in: "path"
+        required: true
+        type: "integer"
+        x-exportParamName: "ArticleId"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Comment"
+    post:
+      summary: "Create a comment"
+      parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        type: "string"
+        x-exportParamName: "Username"
+      - name: "article_id"
+        in: "path"
+        required: true
+        type: "integer"
+        x-exportParamName: "ArticleId"
+      - in: "body"
+        name: "comment"
+        required: true
+        schema:
+          $ref: "#/definitions/Comment"
+        x-exportParamName: "Comment"
+      responses:
+        "200":
+          description: "OK"
 definitions:
-  user:
+  User:
     required:
     - "password"
     - "username"
@@ -87,11 +133,39 @@ definitions:
         type: "string"
       password:
         type: "string"
-  content:
+  Article:
     required:
-    - "article_content"
+    - "author"
+    - "content"
+    - "id"
+    - "title"
     properties:
-      article_content:
+      id:
+        type: "integer"
+      content:
         type: "string"
       author:
         type: "string"
+      title:
+        type: "string"
+    example:
+      author: "author"
+      id: 0
+      title: "title"
+      content: "content"
+  Comment:
+    required:
+    - "articleId"
+    - "author"
+    - "content"
+    properties:
+      articleId:
+        type: "integer"
+      content:
+        type: "string"
+      author:
+        type: "string"
+    example:
+      author: "author"
+      articleId: 0
+      content: "content"

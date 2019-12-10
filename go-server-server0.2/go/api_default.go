@@ -170,6 +170,9 @@ func ArticlePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "X-Requested-With,Content-Type")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -224,6 +227,10 @@ func AuthSigninPost(w http.ResponseWriter, r *http.Request) {
 	response := Token{tokenString}
 	JsonResponse(response, w, http.StatusOK)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "X-Requested-With,Content-Type")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
 }
 
 func AuthSignupPost(w http.ResponseWriter, r *http.Request) {
@@ -272,8 +279,10 @@ func AuthSignupPost(w http.ResponseWriter, r *http.Request) {
 		JsonResponse(response, w, http.StatusBadRequest)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "X-Requested-With,Content-Type")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 }
 
